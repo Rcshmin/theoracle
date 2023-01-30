@@ -6,14 +6,14 @@
     <description>Recent content in Posts on The Oracle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 30 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 07 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>helloworld</title>
-      <link>/post/2023-01-30-helloworld/</link>
-      <pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate>
+      <title>Decision Tree Classifier v1 From Scratch Implementation</title>
+      <link>/post/2022-07-05-decisiontreeclassiferv1/</link>
+      <pubDate>Sat, 07 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/post/2023-01-30-helloworld/</guid>
-      <description></description>
+      <guid>/post/2022-07-05-decisiontreeclassiferv1/</guid>
+      <description>What are decision trees? Decision trees are a non-parametric supervised learning method. Supervised means that the input and output data is labelled. Non-parametric means that no assumptions are made regarding the assumptions of the population. This definition is obviously not that useful, but with some further consideration we can make some sense of it. Analogous to a tree in real life, a decision tree is a tree-like model of decisions.</description>
     </item>
     
   </channel>

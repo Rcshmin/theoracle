@@ -35,16 +35,16 @@ params:
 
   # Show your socail information with icon on index bio with `_index.md` content.
   socialOptions:
-    dev-to:
-    email:
+    dev-to: 
+    email: 
     facebook:
-    github:
+    github: "https://github.com/Rcshmin"
     instagram:
-    linkedin:
+    linkedin: "https://au.linkedin.com/in/rashmin-chitale-0aa989173"
     medium:
     stack-overflow:
     steam:
-    telegram:
+    telegram: 
     twitter:
     twitch:
     whatsapp:

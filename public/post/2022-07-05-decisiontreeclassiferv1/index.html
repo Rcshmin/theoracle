@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="dark">
+    <title>Decision Tree Classifier v1 From Scratch Implementation | The Oracle</title>
+
+    
+    
+    
+    <meta property="og:site_name" content="Hugo Tania is Amazing" />
+    <meta property="og:title" content="Decision Tree Classifier v1 From Scratch Implementation | The Oracle"/>
+    <meta itemprop="name" content="Decision Tree Classifier v1 From Scratch Implementation | The Oracle" />
+    <meta name="twitter:title" content="Decision Tree Classifier v1 From Scratch Implementation | The Oracle" />
+    <meta name="application-name" content="Decision Tree Classifier v1 From Scratch Implementation | The Oracle" /><meta name="twitter:card" content="summary"/>
+
+    <meta name="description" content="Hugo is Absurdly Fast!" />
+    <meta name="twitter:description" content="Hugo is Absurdly Fast!"/>
+    <meta itemprop="description" content="Hugo is Absurdly Fast!"/>
+    <meta property="og:description" content="Hugo is Absurdly Fast!" />
+
+    
+
+<meta property="og:type" content="article" />
+<meta property="article:publisher" content="Rashmin Chitale" />
+<meta property="og:article:published_time" content=2022-05-07T00:00:00Z />
+<meta property="article:published_time" content=2022-05-07T00:00:00Z />
+
+
+  <meta property="og:article:author" content="Rashmin chitale" />
+  <meta property="article:author" content="Rashmin chitale" />
+  <meta name="author" content="Rashmin chitale" />
+
+
+
+
+<script defer type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Decision Tree Classifier v1 From Scratch Implementation",
+    "author": {
+      "@type": "Person",
+      "name": "Rashmin Chitale"
+    },
+    "datePublished": "2022-05-07",
+    "description": "",
+    "wordCount":  4057 ,
+    "mainEntityOfPage": "True",
+    "dateModified": "2022-05-07",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Rashmin Chitale",
+      "logo": {
+        "@type": "imageObject",
+        "url": "\/favicon.ico"
+      }
+    }
+  }
+</script>
+
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    
+    <link rel="stylesheet" href="/sass/main.min.ab99ff095f832511e24ffb2fba2b51ad473b2f7e9301d674eba2c6c3a6e8bd81.css">
+    
+</head>
+    
+    <script>
+        (function() {
+            const colorSchemeKey = 'ThemeColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'ThemeColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.userColorScheme = 'dark';
+        } else {
+            document.documentElement.dataset.userColorScheme = 'light';
+        }
+    })();
+</script>
+
+
+    <body class="dark">
+        <nav class="navbar">
+    <div class="container">
+        <div class="flex">
+            <div>
+                <a class="brand" href="/">
+                    
+                    <span class="emoji">
+                        😎
+                    </span>
+                    
+                    
+                    The Oracle
+                    </a>
+            </div>
+            <div class="flex">
+                
+                <a href="/articles/">Articles</a>
+                
+                
+                    <button id="dark-mode-button">
+                    <svg class="light" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z" fill="#FFCC4D"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                    <svg class="dark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36"><path fill="#FFD983" d="M16 2s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2V2zm18 14s2 0 2 2s-2 2-2 2h-2s-2 0-2-2s2-2 2-2h2zM4 16s2 0 2 2s-2 2-2 2H2s-2 0-2-2s2-2 2-2h2zm5.121-8.707s1.414 1.414 0 2.828s-2.828 0-2.828 0L4.878 8.708s-1.414-1.414 0-2.829c1.415-1.414 2.829 0 2.829 0l1.414 1.414zm21 21s1.414 1.414 0 2.828s-2.828 0-2.828 0l-1.414-1.414s-1.414-1.414 0-2.828s2.828 0 2.828 0l1.414 1.414zm-.413-18.172s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zm-21 21s-1.414 1.414-2.828 0s0-2.828 0-2.828l1.414-1.414s1.414-1.414 2.828 0s0 2.828 0 2.828l-1.414 1.414zM16 32s0-2 2-2s2 2 2 2v2s0 2-2 2s-2-2-2-2v-2z"/><circle fill="#FFD983" cx="18" cy="18" r="10"/><rect x="0" y="0" width="36" height="36" fill="rgba(0, 0, 0, 0)" /></svg>
+                    </button>
+                
+            </div>
+            </div>
+    </div>
+</nav>
+
+
+
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        // Center justify equations in code and markdown cells. Elsewhere
+        // we use CSS to left justify single line equations in code cells.
+        displayAlign: 'center',
+        "HTML-CSS": {
+            styles: {'.MathJax_Display': {"margin": 0}},
+            linebreaks: { automatic: true }
+        }
+    });
+    </script>
+    
+
+        <main>
+            
+<div class="container">
+    <article>
+        <header class="article-header">
+            <div class="thumb">
+                <div>
+                    <h1>Decision Tree Classifier v1 From Scratch Implementation</h1>
+                    <div class="post-meta">
+                        <div>
+                            
+                            
+                            By Rashmin Chitale | <time>May 07, 2022</time>
+                            | 20 minutes
+                        </div>
+                        <div class="tags">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </article>
+
+    <div class="article-post">
+    <h1 id="what-are-decision-trees">
+    <a href="#what-are-decision-trees" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    What are decision trees?
+</h1>
+<p>Decision trees are a non-parametric supervised learning method. Supervised means that the input and output data is labelled. Non-parametric means that no assumptions are made regarding the assumptions of the population. This definition is obviously not that useful, but with some further consideration we can make some sense of it. Analogous to a tree in real life, a decision tree is a tree-like model of decisions. In essence, we pass this model data on several input variables, and ask it to create a tree that predicts the value of the target variable. This is all probably best understood through an example, so let&rsquo;s take a look at one&hellip;</p>
+<h2 id="example">
+    <a href="#example" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Example
+</h2>
+<p>In this example we consider how we can classify a fish as a salmon or tuna based off its length and weight. Looking at the below data set, it is easy to see some patterns, in how each type of fish is grouped based off its two characteristics. For instance, any fish with a length less than around 2.5 is a tuna. Continuing on, a fish with length greater than 2.5, and weight less than around 4 is a salmon. We could also say that a fish with length greater than 7.2 and weight greater than 4.1 is a tuna. You are probably getting the gist of it at this point&hellip;</p>
+<img src="/post/2022-07-05-decisiontreeclassiferv1/index_files/figure-html/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;" />
+<p>If we take all of these splits, or otherwise decisions and organised them, it would look something like this</p>
+<pre tabindex="0"><code>## n= 1000 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##   1) root 1000 392 tuna (0.3920000 0.6080000)  
+##     2) length&gt;=2.996015 693 301 salmon (0.5656566 0.4343434)  
+##       4) weight&lt; 4.006707 306   0 salmon (1.0000000 0.0000000) *
+##       5) weight&gt;=4.006707 387  86 tuna (0.2222222 0.7777778)  
+##        10) length&lt; 6.978225 220  86 tuna (0.3909091 0.6090909)  
+##          20) length&lt; 3.398175 19   2 salmon (0.8947368 0.1052632) *
+##          21) length&gt;=3.398175 201  69 tuna (0.3432836 0.6567164)  
+##            42) length&lt; 4.998481 86  41 tuna (0.4767442 0.5232558)  
+##              84) weight&gt;=6.948427 41   0 salmon (1.0000000 0.0000000) *
+##              85) weight&lt; 6.948427 45   0 tuna (0.0000000 1.0000000) *
+##            43) length&gt;=4.998481 115  28 tuna (0.2434783 0.7565217)  
+##              86) length&gt;=6.017146 58  28 tuna (0.4827586 0.5172414)  
+##               172) weight&lt; 6.832503 28   0 salmon (1.0000000 0.0000000) *
+##               173) weight&gt;=6.832503 30   0 tuna (0.0000000 1.0000000) *
+##              87) length&lt; 6.017146 57   0 tuna (0.0000000 1.0000000) *
+##        11) length&gt;=6.978225 167   0 tuna (0.0000000 1.0000000) *
+##     3) length&lt; 2.996015 307   0 tuna (0.0000000 1.0000000) *
+</code></pre><img src="/post/2022-07-05-decisiontreeclassiferv1/index_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" />
+<p>And voila, we have our tree! From referring to the diagram above, we can see that the decision tree has created splits across our input variables (weight and length) such that our scatterplot becomes partitioned into rectangular regions containing each type of the fish (the target variable). This is exactly what the decision tree classifier does. Some of you may be asking why this is useful? Well suppose we have a noob fisherman in the Atlantic ocean (which only contains salmon and tuna for our purposes) who has just caught his first fish, but is unsure of what fish it is. Taking the decision tree just produced, this noob fisherman could then identify what fish he has caught. Well this is not exactly the most realistic scenario, but you get the idea hopefully. So now that we know what the algorithm does, lets take a look at some terms that are often thrown around when talking about decisions tree&rsquo;s.</p>
+<h1 id="describing-a-tree">
+    <a href="#describing-a-tree" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Describing a tree
+</h1>
+<p>It would good if we could have some terminology to describe the different parts of a tree&hellip;</p>
+<ul>
+<li><strong>Root Node</strong>: The input data set or population used to create the decision tree is the root node. It is always the tp most node in a decision tree from which the data set it split into different subsets</li>
+<li><strong>Decision node</strong>: Sub-nodes that are split into further sub-nodes. The decision nodes, as the name suggests, are the nodes which split our data set into subsets. From our example before, the $\text{length} \geq 3$`  or $\text{length }&lt;7$ are two of the many decision nodes</li>
+<li><strong>Parent and child node</strong>: A node which is divided sub-nodes is the parent node of the sub-nodes, whereas the sub-nodes are the children of the given parent node. The $\text{weight} &lt; 6.8$ is the parent node of the terminal nodes below it.</li>
+<li><strong>Leaf/terminal node</strong>: Nodes that do not get split any further</li>
+<li><strong>Pure node</strong>: A node at which points classified all belong to a single class. For our tree, all the terminal nodes are also pure nodes</li>
+<li><strong>Branch/sub-tree</strong>: A subsection of the entire tree is called branch or sub-tree</li>
+</ul>
+<h1 id="measures-of-uncertainty">
+    <a href="#measures-of-uncertainty" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Measures of uncertainty
+</h1>
+<p>We saw earlier that the purpose of a decision tree is to partition the data into regions of a certain class (or try its best to do so). There were many choices for the split among our two input variables, but one may naturally ask which of these splits are the best, and in which order should we carry them out, such that the resultant data is partitioned as good as possible. Now as it turns out, this question relates the notion of uncertainty. The best split will be the one that minimizes the uncertainty of the child nodes. More specifically, we seek to achieve the maximum level of homogeneity (sameness) in the target variable, such that the total uncertainty of the child nodes are less than the parent node.</p>
+<h2 id="entropy">
+    <a href="#entropy" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Entropy
+</h2>
+<p>Entropy quantifies the amount of uncertainty involved in the outcome of a process. It has formula</p>
+<p>\begin{align*}
+\mbox{Entropy} &amp;= \sum_{c}{f_{c} \cdot I(c)}
+\end{align*}</p>
+<p>where $f_{c}$ is the fraction of a class in data set and $I(c)$ is the information content in the class. Also $c$ is the total number of classes. In the context of decision tree classifiers, $I(c) = -\log_{2}{(f_{c})}$ which gives</p>
+<p>\begin{align*}
+\mbox{Entropy} &amp;= -\sum_{c}{f_{c} \cdot \log_{2}{(f_{c})}} &amp; \
+\end{align*}</p>
+<p>The choice of the $\text{log}$ function is beyond the scope of this article, but those interested may wish to take a look at <a href="https://towardsdatascience.com/entropy-is-a-measure-of-uncertainty-e2c000301c2c">this article</a>. Implementing an entropy function can be done as shown below</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">get_entropy</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Assume x is factor of labels</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span> <span class="nf">return</span><span class="p">(</span><span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">weights</span> <span class="o">=</span> <span class="nf">table</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">info_content</span> <span class="o">=</span> <span class="o">-</span><span class="n">weights</span><span class="o">*</span><span class="nf">log2</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">entropy</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">info_content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">entropy</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>We can perform a few checks using our function to check that it performs as expected</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#Entropy is zero?</span>
+</span></span><span class="line"><span class="cl"><span class="nf">get_entropy</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#Entropy is one?</span>
+</span></span><span class="line"><span class="cl"><span class="nf">get_entropy</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#Entropy is non-zero?</span>
+</span></span><span class="line"><span class="cl"><span class="nf">get_entropy</span><span class="p">(</span><span class="n">salmon_fish</span><span class="o">$</span><span class="n">type</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0.9660781</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>If we only have one class then our data is homogeneous, which means there is no uncertainty regarding the data. If we have an equal number of observations across two classes, then uncertainty is at its maximum. Note that a lower value of entropy always means less uncertainty. A simple situation which may help one understand how entropy works is the flipping of a coin</p>
+<img src="/post/2022-07-05-decisiontreeclassiferv1/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<p>For the coin flip (two classes), entropy is constrained between zero and one. A fair coin has the most uncertainty, whereas a coin with some bias towards one side has less uncertainty. This intuitively makes sense.</p>
+<h2 id="gini-impurity">
+    <a href="#gini-impurity" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Gini impurity
+</h2>
+<p>Gini impurity is one of the other available measures for calculating uncertainty. While entropy does not have an intuitive interpretation of its formula, we can say that gini impurity calculates the amount of probability of a specific feature that is classified incorrectly when selected randomly precisely. It has formula</p>
+<p>\begin{align*}
+\mbox{Gini index} &amp;= 1 - \sum_{i=1}^{n}{(p_{i})^2}
+\end{align*}</p>
+<p>where $p_{i}$ is the probability of an element being classified for a distinct class. This can also be easily implemented</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">get_gini_impurity</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Assume x is a factor with labels</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span> <span class="nf">return</span><span class="p">(</span><span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">weights</span> <span class="o">=</span> <span class="nf">table</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">weights_squared</span> <span class="o">=</span> <span class="n">weights^2</span>
+</span></span><span class="line"><span class="cl">  <span class="n">sum_of_squares</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">weights_squared</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gini</span> <span class="o">=</span> <span class="m">1</span> <span class="o">-</span> <span class="n">sum_of_squares</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">gini</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>As with entropy, we can also perform some checks</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="c1">#Minimum uncertainty is 0</span>
+</span></span><span class="line"><span class="cl"><span class="nf">get_gini_impurity</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#Maximum uncertainty is 0.5 for two classes</span>
+</span></span><span class="line"><span class="cl"><span class="nf">get_gini_impurity</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0.5</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#Between 0.5 and 1?</span>
+</span></span><span class="line"><span class="cl"><span class="nf">get_gini_impurity</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## [1] 0.75</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Gini impurity in the case of two classes is constrained between zero and half, with zero being minimum uncertainty and half being maximum uncertainty. However with more than two classes, the measure will always be in between zero and one. This is in contrast to entropy which has no upper bound. Once again, note that higher values of gini impurity represent greater uncertainty and vice versa.</p>
+<h2 id="information-gain">
+    <a href="#information-gain" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Information gain
+</h2>
+<p>Information gain serves an extension to the calculation of entropy. It is the difference in entropy between a parent node and the average entropy of its children.</p>
+<p>\begin{align*}
+\overbrace{\mbox{IG}(T,a)}^{\mbox{information gain}} &amp;= \overbrace{H(T)}^{\mbox{entropy of parent}} - \overbrace{H(T|a)}^{\mbox{average entropy of children}} &amp; \
+\end{align*}</p>
+<p>While we seek to minimize entropy, we alternatively seek to maximize information gain. Or in other words, we seek to find the split with the most information gain.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">get_information_gain</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">l_child</span><span class="p">,</span> <span class="n">r_child</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">&#34;entropy&#34;</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Get weights in each child</span>
+</span></span><span class="line"><span class="cl">  <span class="n">l_child</span> <span class="o">=</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="n">l_child</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">r_child</span> <span class="o">=</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="n">r_child</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">weight_l</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">l_child</span><span class="p">)</span><span class="o">/</span><span class="nf">nrow</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">weight_r</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">r_child</span><span class="p">)</span><span class="o">/</span><span class="nf">nrow</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Choose mode</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s">&#34;gini&#34;</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gain</span> <span class="o">=</span> <span class="nf">get_gini_impurity</span><span class="p">(</span><span class="n">parent[</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="n">]</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">weight_l</span><span class="o">*</span><span class="nf">get_gini_impurity</span><span class="p">(</span><span class="n">l_child[</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">l_child</span><span class="p">)</span><span class="n">]</span><span class="p">)</span> <span class="o">+</span> <span class="n">weight_r</span><span class="o">*</span><span class="nf">get_gini_impurity</span><span class="p">(</span><span class="n">r_child[</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">r_child</span><span class="p">)</span><span class="n">]</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gain</span> <span class="o">=</span> <span class="nf">get_entropy</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">parent[</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="n">]</span><span class="p">))</span> <span class="o">-</span> <span class="p">(</span><span class="n">weight_l</span><span class="o">*</span><span class="nf">get_entropy</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">l_child[</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">l_child</span><span class="p">)</span><span class="n">]</span><span class="p">))</span> <span class="o">+</span> <span class="n">weight_r</span><span class="o">*</span><span class="nf">get_entropy</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="n">r_child[</span><span class="p">,</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">r_child</span><span class="p">)</span><span class="n">]</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="stopping-conditions">
+    <a href="#stopping-conditions" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Stopping conditions
+</h1>
+<p>Now that we know how to find the best split (the one that reduces the most uncertainty) and that decision trees essentially recursively split the data into regions, it is important to consider the stopping conditions. This is primarily due to the fact that the CART (Classification and Regression Trees) algorithms are greedy. What I mean by them being &lsquo;greedy&rsquo; is that they will keep splitting the data in an effort to reduce entropy unless told otherwise. This produces a &rsquo;locally optimal solution&rsquo; rather than a &lsquo;globally optimal solution&rsquo;; in simpler terms, we could say that a decision tree never reconsiders its choices, and only makes whatever choice seems best at the moment. While we can not necessarily prevent the &rsquo;live in the moment&rsquo; behavior of the decision tree, it is important to stop the decision tree from partitioning our data infinitely. A solution in which we do not restrain the algorithm will be computationally expensive, difficult to interpret and probably be overfitted to the data.</p>
+<ul>
+<li><strong>Minimum sample for a new node</strong>: Some implementations of CART algorithms such as the one in <code>rpart</code> often require at least 5 observations to create a new node</li>
+<li><strong>Minimum amount of information gain or entropy</strong>: We could also tell the decision tree that is not able to create a new node unless the entropy for that split meets a threshold value</li>
+<li><strong>Minimum depth of node</strong>: A pre-specified limit for the depth will stop the algorithm from making too many splits</li>
+</ul>
+<h1 id="helper-functions">
+    <a href="#helper-functions" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Helper functions
+</h1>
+<p>Before we begin creating our helper function for the decision tree classifier, it important to define what form the input data will be in for our algorithm. We will use the following form</p>
+<p>\begin{bmatrix}
+x_{1} &amp; x_{2} &amp; x_{3} &amp; x_{4} &amp; \dots &amp; x_{k} &amp; Y
+\end{bmatrix}</p>
+<p>where $x_{1}, x_{2}, x_{3}, &hellip; , x_{k}$ are the k features (variables) we will use to train our model and where $Y$ is the target variable (the labels)</p>
+<h2 id="train-test-split">
+    <a href="#train-test-split" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Train-test split
+</h2>
+<p>We will first code  function to split our data into a training data set, which will be used to train the decision tree, and then a testing data set, which will be used to test how well the decision tree performs. Note that this function is not a helper that will be called by the main algorithm, but I could not find a better section to put this under.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">get_train_test</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">train_size</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="n">observations</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Option for a proportion or number</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span><span class="n">train_size</span> <span class="o">&lt;</span> <span class="m">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">test_size_f</span> <span class="o">=</span> <span class="nf">round</span><span class="p">(</span><span class="n">train_size</span><span class="o">*</span><span class="nf">nrow</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">test_size_f</span> <span class="o">=</span> <span class="n">train_size</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Get index of train values</span>
+</span></span><span class="line"><span class="cl">  <span class="n">train_index</span> <span class="o">=</span> <span class="nf">sample</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">test_size_f</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">test_observations</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">-</span> <span class="nf">length</span><span class="p">(</span><span class="n">train_index</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Get index of test values</span>
+</span></span><span class="line"><span class="cl">  <span class="n">test_index</span> <span class="o">=</span> <span class="nf">double</span><span class="p">(</span><span class="n">length</span> <span class="o">=</span> <span class="nf">length</span><span class="p">(</span><span class="n">observations</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">observations</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">if</span><span class="p">(</span><span class="nf">any</span><span class="p">(</span><span class="n">observations[i]</span> <span class="o">==</span> <span class="n">train_index</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">next</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">test_index[i]</span> <span class="o">=</span> <span class="n">observations[i]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">test_index_f</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="nf">subset</span><span class="p">(</span><span class="n">test_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Create df&#39;s from index values</span>
+</span></span><span class="line"><span class="cl">  <span class="n">train_df</span> <span class="o">=</span> <span class="n">df[train_index</span><span class="p">,</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">test_df</span> <span class="o">=</span> <span class="n">df[test_index_f</span><span class="p">,</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="checking-the-purity">
+    <a href="#checking-the-purity" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Checking the purity
+</h2>
+<p>This helper will be used to check whether a subset of the original data is pure. As discussed before, a pure node is a point at which the subset of the original data contains only one class. If we find that the data is pure, we would not want to continue splitting the data, as entropy would be zero at that point. In other words, we would have full certainty over the class of the points in that node.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">check_purity</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Get unique labels</span>
+</span></span><span class="line"><span class="cl">  <span class="n">labels</span> <span class="o">=</span> <span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="nf">pull</span><span class="p">(</span><span class="n">data[</span><span class="p">,</span> <span class="m">-1</span><span class="n">]</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Check if there is only one</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">ifelse</span><span class="p">(</span><span class="n">labels</span> <span class="o">==</span> <span class="m">1</span><span class="p">,</span> <span class="nf">return</span><span class="p">(</span><span class="kc">TRUE</span><span class="p">),</span> <span class="nf">return</span><span class="p">(</span><span class="kc">FALSE</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="classification">
+    <a href="#classification" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Classification
+</h2>
+<p>After we have decided to stop creating new split at some point of our tree, most likely when a stopping condition is reached, we need to return a classification for the points in whichever subset of the original data we have at the node. If the data is pure, then our choice of what classification to make is rather simple. If the data is not pure, we will use the class that appears the most among the data points.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">classify_data</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Get labels</span>
+</span></span><span class="line"><span class="cl">  <span class="n">get_labels</span> <span class="o">=</span> <span class="nf">pull</span><span class="p">(</span><span class="n">data[</span><span class="p">,</span> <span class="m">-1</span><span class="n">]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Get label frequency and max</span>
+</span></span><span class="line"><span class="cl">  <span class="n">label_freq</span> <span class="o">=</span> <span class="nf">table</span><span class="p">(</span><span class="n">get_labels</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">label_freq_a</span> <span class="o">=</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="n">label_freq</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">label_dom</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="n">label_freq</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Get classification</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">label_freq_a</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">if</span><span class="p">(</span><span class="n">label_freq_a</span><span class="o">$</span><span class="n">Freq[i]</span> <span class="o">==</span> <span class="n">label_dom</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="n">classification</span> <span class="o">=</span> <span class="nf">as.character</span><span class="p">(</span><span class="n">label_freq_a</span><span class="o">$</span><span class="n">get_labels[i]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">next</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">classification</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="splitting-the-data">
+    <a href="#splitting-the-data" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Splitting the data
+</h2>
+<p>I am going to, un-intuitively, make the helper that will split the data before making the helper for the potential splits. Once we have a potential split value for a given feature we need to separate the parent node into two children. Anything above the value ($&gt;$) will be coined as the right node, and anything below the value ($\leq$) will be termed the left node. These two nodes, together, are the children of the parent node.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">split_data</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">split_column</span><span class="p">,</span> <span class="n">split_value</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="n">split_c</span> <span class="o">=</span> <span class="n">data[[split_column]]</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Filter the data into above and below</span>
+</span></span><span class="line"><span class="cl">  <span class="n">data_below</span> <span class="o">=</span> <span class="n">data[split_c</span> <span class="o">&lt;=</span> <span class="n">split_value</span><span class="p">,</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">data_above</span> <span class="o">=</span> <span class="n">data[split_c</span> <span class="o">&gt;</span> <span class="n">split_value</span><span class="p">,</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">data_above</span><span class="p">,</span> <span class="n">data_below</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="potential-and-best-splits">
+    <a href="#potential-and-best-splits" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Potential and best splits
+</h2>
+<p>The potential split helper(s) are arguably the most important helper. These helpers, as the name suggests, will search our data for the split that provides the most certainty regarding the classes of the child nodes. It will return a feature, and a value for that feature for which we must split. First and foremost, we need to consider the manner in which we will search our data. There are several ways to approach the search stage. One such way is to increment through the range of a feature by a learning rate; at each of these increment, we will calculate the entropy of a split made at that point. The effectiveness of this approach is largely determined by the learning rate. A very small learning rate will take a long time iterate through the data, but will be more accurate. The converse is also true for a large learning rate. Another approach would be to only have potential splits be made on each real value a feature has. The middle ground between these approaches is to check for a potential splits in the middle of two values for a given features. I will use the third approach as it is the easiest to implement</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">get_potential_splits</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Sorting stage</span>
+</span></span><span class="line"><span class="cl">  <span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+</span></span><span class="line"><span class="cl">  <span class="n">col_n</span> <span class="o">=</span> <span class="nf">ncol</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="n">col_n</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_i</span> <span class="o">=</span> <span class="nf">sort</span><span class="p">(</span><span class="n">data[</span><span class="p">,</span> <span class="n">i]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data[</span><span class="p">,</span> <span class="n">i]</span> <span class="o">=</span> <span class="n">data_i</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Creating the splits</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dat</span> <span class="o">=</span> <span class="n">data[0</span><span class="p">,</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span><span class="n">j</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="n">col_n</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">2</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">data</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">      <span class="n">curr_val</span> <span class="o">=</span> <span class="n">data[i</span><span class="p">,</span> <span class="n">j]</span>
+</span></span><span class="line"><span class="cl">      <span class="n">previous_val</span> <span class="o">=</span> <span class="n">data</span><span class="nf">[</span><span class="p">(</span><span class="n">i</span><span class="m">-1</span><span class="p">),</span> <span class="n">j]</span>
+</span></span><span class="line"><span class="cl">      <span class="n">potential_val</span> <span class="o">=</span> <span class="p">(</span><span class="n">curr_val</span> <span class="o">+</span> <span class="n">previous_val</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl">      <span class="n">dat</span><span class="nf">[</span><span class="p">(</span><span class="n">i</span><span class="m">-1</span><span class="p">),</span> <span class="n">j]</span> <span class="o">=</span> <span class="n">potential_val</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dat</span><span class="nf">[nrow</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span><span class="m">+1</span><span class="p">,</span> <span class="n">]</span> <span class="o">=</span> <span class="n">data</span><span class="nf">[nrow</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">dat</span> <span class="o">=</span> <span class="n">dat[</span><span class="p">,</span> <span class="m">1</span><span class="o">:</span><span class="n">col_n]</span>
+</span></span><span class="line"><span class="cl">  <span class="n">potential_splits</span> <span class="o">=</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span><span class="nf">ncol</span><span class="p">(</span><span class="n">potential_splits</span><span class="p">)</span> <span class="o">==</span> <span class="m">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">colnames</span><span class="p">(</span><span class="n">potential_splits</span><span class="p">)</span><span class="n">[[1]]</span> <span class="o">=</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="n">[[1]]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">potential_splits</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">calculate_overall_entropy</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data_below</span><span class="p">,</span> <span class="n">data_above</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Proportion of samples in left and right children</span>
+</span></span><span class="line"><span class="cl">  <span class="n">n</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">data_below</span><span class="p">)</span> <span class="o">+</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">data_above</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p_data_below</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">data_below</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+</span></span><span class="line"><span class="cl">  <span class="n">p_data_above</span> <span class="o">=</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">data_above</span><span class="p">)</span><span class="o">/</span><span class="n">n</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Calculate overall entropy</span>
+</span></span><span class="line"><span class="cl">  <span class="n">overall_entropy</span> <span class="o">=</span> <span class="p">((</span><span class="n">p_data_below</span><span class="o">*</span><span class="nf">get_entropy</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="nf">pull</span><span class="p">(</span><span class="n">data_below[</span><span class="p">,</span> <span class="m">-1</span><span class="n">]</span><span class="p">))))</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">                       <span class="p">(</span><span class="n">p_data_above</span><span class="o">*</span><span class="nf">get_entropy</span><span class="p">(</span><span class="nf">as.character</span><span class="p">(</span><span class="nf">pull</span><span class="p">(</span><span class="n">data_above[</span><span class="p">,</span> <span class="m">-1</span><span class="n">]</span><span class="p">)))))</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">overall_entropy</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">determine_best_split</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">potential_splits</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Initialize overall entropy and col </span>
+</span></span><span class="line"><span class="cl">  <span class="n">running_entropy</span> <span class="o">=</span> <span class="m">9999</span>
+</span></span><span class="line"><span class="cl">  <span class="n">best_split_value</span> <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">  <span class="n">best_split_column</span> <span class="o">=</span> <span class="s">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Find best entropy over potential splits</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span><span class="n">j</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">ncol</span><span class="p">(</span><span class="n">potential_splits</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">potential_splits[</span><span class="p">,</span> <span class="n">j]</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">      <span class="n">mask_val</span> <span class="o">=</span> <span class="n">i</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">mask_col</span> <span class="o">=</span> <span class="n">j</span>
+</span></span><span class="line"><span class="cl">      <span class="n">splits</span> <span class="o">=</span> <span class="nf">split_data</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">split_column</span> <span class="o">=</span> <span class="n">mask_col</span><span class="p">,</span> <span class="n">split_value</span> <span class="o">=</span> <span class="n">mask_val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="n">relative_entropy</span> <span class="o">=</span> <span class="nf">calculate_overall_entropy</span><span class="p">(</span><span class="n">data_above</span> <span class="o">=</span> <span class="n">splits[[1]]</span><span class="p">,</span> <span class="n">data_below</span> <span class="o">=</span> <span class="n">splits[[2]]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">if</span><span class="p">(</span><span class="n">relative_entropy</span> <span class="o">&lt;</span> <span class="n">running_entropy</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="n">running_entropy</span> <span class="o">=</span> <span class="n">relative_entropy</span>
+</span></span><span class="line"><span class="cl">        <span class="n">best_split_value</span> <span class="o">=</span> <span class="n">mask_val</span>
+</span></span><span class="line"><span class="cl">        <span class="n">best_split_column</span> <span class="o">=</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">potential_splits</span><span class="p">)</span><span class="n">[j]</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">next</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">best_split_column</span><span class="p">,</span> <span class="n">best_split_value</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">determine_best_split</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">potential_splits</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">&#34;gini&#34;</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Initialize overall entropy and col </span>
+</span></span><span class="line"><span class="cl">  <span class="n">running_gain</span> <span class="o">=</span> <span class="o">-</span><span class="kc">Inf</span>
+</span></span><span class="line"><span class="cl">  <span class="n">best_split_value</span> <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">  <span class="n">best_split_column</span> <span class="o">=</span> <span class="s">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Find best entropy over potential splits</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span><span class="n">j</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">ncol</span><span class="p">(</span><span class="n">potential_splits</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">potential_splits[</span><span class="p">,</span> <span class="n">j]</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">      <span class="n">mask_val</span> <span class="o">=</span> <span class="n">i</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">mask_col</span> <span class="o">=</span> <span class="n">j</span>
+</span></span><span class="line"><span class="cl">      <span class="n">splits</span> <span class="o">=</span> <span class="nf">split_data</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">split_column</span> <span class="o">=</span> <span class="n">mask_col</span><span class="p">,</span> <span class="n">split_value</span> <span class="o">=</span> <span class="n">mask_val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="n">relative_gain</span> <span class="o">=</span> <span class="nf">get_information_gain</span><span class="p">(</span><span class="n">parent</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">r_child</span> <span class="o">=</span> <span class="n">splits[[1]]</span><span class="p">,</span> <span class="n">l_child</span> <span class="o">=</span> <span class="n">splits[[2]]</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">if</span><span class="p">(</span><span class="n">relative_gain</span> <span class="o">&gt;</span> <span class="n">running_gain</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="n">running_gain</span> <span class="o">=</span> <span class="n">relative_gain</span>
+</span></span><span class="line"><span class="cl">        <span class="n">best_split_value</span> <span class="o">=</span> <span class="n">mask_val</span>
+</span></span><span class="line"><span class="cl">        <span class="n">best_split_column</span> <span class="o">=</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">potential_splits</span><span class="p">)</span><span class="n">[j]</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">next</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">best_split_column</span><span class="p">,</span> <span class="n">best_split_value</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#might need to come back in future and add as.character() to gini as well</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="the-main-algorithm">
+    <a href="#the-main-algorithm" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    The main algorithm
+</h1>
+<h2 id="recursive-function">
+    <a href="#recursive-function" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Recursive function
+</h2>
+<p>The main algorithm is a recursive function that calls the helpers to split the data, given that the stopping conditions have not been violated. In the below function, the stopping conditions are first checked. There are three conditions implemented. Namely, whether the data is fully pure, whether there is enough data points to create a new splitting node, and whether the maximum depth of the tree has been reached. The function then uses the helpers that were created earlier to recursively split the data, generating a &lsquo;yes&rsquo; and &rsquo;no&rsquo; answer. It prints all of this information as it does it; more nuanced code would likely build and print the tree in this same function, but I was unable to build the necessary code to do so</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">decision_tree_algorithm</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                    <span class="n">counter</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                    <span class="n">min_samples</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">                                    <span class="n">max_depth</span><span class="p">,</span> <span class="n">is.child</span> <span class="o">=</span> <span class="s">&#34;root&#34;</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="n">data</span> <span class="o">=</span> <span class="n">df</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#Check whether stopping conditions have been violated</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span><span class="nf">any</span><span class="p">(</span><span class="nf">check_purity</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_samples</span><span class="p">,</span> <span class="p">(</span><span class="n">counter</span> <span class="o">-</span> <span class="m">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">max_depth</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">classification</span> <span class="o">=</span> <span class="nf">classify_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">return</span><span class="p">(</span><span class="nf">print</span><span class="p">(</span><span class="nf">paste</span><span class="p">(</span><span class="n">classification</span><span class="p">,</span> <span class="n">is.child</span><span class="p">,</span> <span class="n">counter</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="c1">#Recursive part</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">#Helper functions</span>
+</span></span><span class="line"><span class="cl">    <span class="n">potential_splits</span> <span class="o">=</span> <span class="nf">get_potential_splits</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">split_g</span> <span class="o">=</span> <span class="nf">determine_best_split</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">potential_splits</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">split_column</span> <span class="o">=</span> <span class="n">split_g[[1]]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">split_value</span> <span class="o">=</span> <span class="n">split_g[[2]]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_g</span> <span class="o">=</span> <span class="nf">split_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">split_column</span><span class="p">,</span> <span class="n">split_value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_above</span> <span class="o">=</span> <span class="n">data_g[[1]]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_below</span> <span class="o">=</span> <span class="n">data_g[[2]]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">print</span><span class="p">(</span><span class="nf">paste</span><span class="p">(</span><span class="n">split_column</span><span class="p">,</span> <span class="n">split_value</span><span class="p">,</span> <span class="n">is.child</span><span class="p">,</span> <span class="n">counter</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">#Find the answers</span>
+</span></span><span class="line"><span class="cl">    <span class="n">yes_answer</span> <span class="o">=</span> <span class="nf">decision_tree_algorithm</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">data_below</span><span class="p">,</span> <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="m">1</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">is.child</span> <span class="o">=</span> <span class="s">&#34;yes &lt;=&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">no_answer</span> <span class="o">=</span> <span class="nf">decision_tree_algorithm</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">data_above</span><span class="p">,</span> <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="m">1</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">is.child</span> <span class="o">=</span> <span class="s">&#34;no &gt;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>So the main algorithm yields the following output on the salmon-fish data&hellip;</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="nf">decision_tree_algorithm</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">salmon_fish</span><span class="p">,</span> <span class="n">min_samples</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">max_depth</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><pre tabindex="0"><code>## [1] &#34;length 2.99601479397271 root 1&#34;
+## [1] &#34;tuna yes &lt;= 2&#34;
+## [1] &#34;weight 4.00670743566802 no &gt; 2&#34;
+## [1] &#34;salmon yes &lt;= 3&#34;
+## [1] &#34;length 6.97822538046186 no &gt; 3&#34;
+## [1] &#34;tuna yes &lt;= 4&#34;
+## [1] &#34;tuna no &gt; 4&#34;
+</code></pre><p>Now this is obviously not what a decision tree looks like (as was shown earlier). But it is a step in the right direction. There are all the essential components of a decision tree in the jumble of output, but it requires sorting to be more comprehensible.</p>
+<h2 id="organising-function">
+    <a href="#organising-function" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Organising function
+</h2>
+<p>This function calls the decision tree recursive algorithm, captures the output and re-formats in into a data frame. An efficient implementation will likely not need this function, but since I was unable to fully incorporate the whole process in the recursive function, here we are.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">decision_tree</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#Store decisions and reformat</span>
+</span></span><span class="line"><span class="cl">  <span class="n">decisions</span> <span class="o">=</span> <span class="nf">capture.output</span><span class="p">(</span><span class="nf">decision_tree_algorithm</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">,</span> <span class="n">min_samples</span> <span class="o">=</span> <span class="n">min_samples</span><span class="p">,</span> <span class="n">max_depth</span> <span class="o">=</span> <span class="n">max_depth</span><span class="p">),</span> <span class="n">append</span> <span class="o">=</span> <span class="bp">F</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">decisions_df</span> <span class="o">=</span> <span class="nf">strsplit</span><span class="p">(</span><span class="n">decisions</span><span class="p">,</span> <span class="s">&#34; &#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">decisions_cl</span> <span class="o">=</span> <span class="nf">sapply</span><span class="p">(</span><span class="n">decisions_df</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#34;\&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#Make list of equal length</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">decisions_cl</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">if</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">decisions_cl[[i]]</span><span class="p">)</span> <span class="o">!=</span> <span class="m">6</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="m">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">      <span class="n">decisions_cl[[i]]</span> <span class="o">=</span> <span class="nf">append</span><span class="p">(</span><span class="n">decisions_cl[[i]]</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="n">after</span> <span class="o">=</span> <span class="m">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">decisions_cl[[i]]</span> <span class="o">=</span> <span class="nf">append</span><span class="p">(</span><span class="n">decisions_cl[[i]]</span><span class="p">,</span> <span class="kc">NA</span><span class="p">,</span> <span class="n">after</span> <span class="o">=</span> <span class="m">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}}</span> <span class="n">else</span> <span class="p">{</span> <span class="nf">next</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">}}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#Convert to df and reformat again</span>
+</span></span><span class="line"><span class="cl">  <span class="n">decisions_df</span> <span class="o">=</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="n">decisions_cl</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">decisions_t</span> <span class="o">=</span> <span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">t</span><span class="p">(</span><span class="n">decisions_df</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="n">decisions_x</span> <span class="o">=</span> <span class="n">decisions_t[</span><span class="p">,</span> <span class="m">-1</span><span class="n">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">row.names</span><span class="p">(</span><span class="n">decisions_x</span><span class="p">)</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">decisions_x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">colnames</span><span class="p">(</span><span class="n">decisions_x</span><span class="p">)</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#34;node&#34;</span><span class="p">,</span> <span class="s">&#34;split.val&#34;</span><span class="p">,</span> <span class="s">&#34;is.child&#34;</span><span class="p">,</span> <span class="s">&#34;split&#34;</span><span class="p">,</span> <span class="s">&#34;depth&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">#Sort the df</span>
+</span></span><span class="line"><span class="cl">  <span class="n">decisions_x</span> <span class="o">=</span> <span class="n">decisions_x</span><span class="nf">[order</span><span class="p">(</span><span class="n">decisions_x</span><span class="o">$</span><span class="n">depth</span><span class="p">),</span> <span class="n">]</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="nf">return</span><span class="p">(</span><span class="n">decisions_x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The organising function returns output that looks like this</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">salmon_df</span> <span class="o">=</span> <span class="nf">decision_tree</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">salmon_fish</span><span class="p">,</span> <span class="n">min_samples</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">max_depth</span> <span class="o">=</span> <span class="m">2</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="/post/2022-07-05-decisiontreeclassiferv1/index_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<p>This is just what we got from the recursive function, but re-organised into a data frame format. Once again this is not in the tree format, but a rather a tabular view of each node in the tree. However if we compare our data frame on the right above to a decision tree created using rpart, it is clear that they are essentially the same. Ideally I would have wanted to somehow take the data frame that is returned from the organising function, and somehow printed it out in a tree format in the console. But that is a piece of the puzzle that I am yet to solve for now.</p>
+<h1 id="remarks">
+    <a href="#remarks" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    Remarks
+</h1>
+<p>If it isn&rsquo;t already clear, you might have noticed that this implementations leaves a lot to be desired. For instance, the tree created by the functions I have made are not in a tree format, but rather a rectangular format. Below, I have highlighted some issues or deficiencies in what I have shown above</p>
+<ul>
+<li>
+<p>Converting data frame tree output into a binary tree that can be printed to the console</p>
+</li>
+<li>
+<p>Post pruning; sometimes a split may not necessarily be useful. Removing branches from the tree after building it can greatly increase its comprehensibility</p>
+</li>
+<li>
+<p>A classification function. The whole point of the decision tree was to enable the classification of a point that is not in our data set. This function would convert the tree into a series of ifelse statements which can be traversed to classify a point</p>
+</li>
+<li>
+<p>Regression. So far, I have completely omitted the discussion of decision tree regression. A decision tree regressor can be used to predict a value</p>
+</li>
+<li>
+<p>Option to minimise over different metrics. Gini-impurity, information gain and entropy are all different metrics. Minimising over these metrics does not produce the same tree everytime</p>
+</li>
+<li>
+<p>Categorical data. I only made an implementation that works on numerical data. As it turns out splits can also be made over categorical data.</p>
+</li>
+<li>
+<p>An OOP implementation. The more and more I think about it, OOP might be better suited to implementing this algorithm; robustness and efficiency.</p>
+</li>
+</ul>
+<p>One last thing. While I did not make a fully functional or robust solution by any means, this implementation did heighten my knowledge of decision trees. No implementation by a single user is likely to be better than existing libraries. But then again no one attempts to solve this kind of problem with that intention. Understanding and a nice coding challenge. That is where the real value in attempting this problem lies.</p>
+<h1 id="references">
+    <a href="#references" class="anchor">
+        <svg class="icon" aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+            <path fill-rule="evenodd"
+                d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+            </path>
+        </svg>
+    </a>
+    References
+</h1>
+<ul>
+<li><a href="https://github.com/SebastianMantey/Decision-Tree-from-Scratch">SebastianMantey implementation of a decision tree from scratch in python</a></li>
+<li><a href="https://github.com/bryantravissmith/FromScratch/blob/master/SupervisedLearning/DecisionTrees/Implementing%20Decision%20Trees%20From%20Scratch%20Using%20R.ipynb">Bryan Travis Smith OOP implementation of a decision tree in both R and python</a></li>
+<li><a href="https://www.youtube.com/watch?v=dCez6oGZilY">Rivik-math video explaining logic behind a decision tree classifer</a></li>
+<li><a href="https://www.youtube.com/watch?v=sgQAhG5Q7iY">Normalized nerd series on decision tree classifiers</a></li>
+</ul>
+
+    </div>
+</div>
+
+<div class="container">
+    
+    <nav class="flex container suggested">
+        
+        
+        
+    </nav>
+    
+</div>
+ 
+<div class="container">
+    
+    <script src="https://giscus.app/client.js" 
+        data-repo="WingLim/hugo-tania"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMTYyNjQzMDc="
+        
+        data-category="Comments"
+        data-category-id="DIC_kwDOEtnPc84B_WKP"
+        
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-theme="light"
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<script>
+    function setGiscusTeheme(theme) {
+        let giscus = document.querySelector('.giscus iframe');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme
+                        }
+                    }
+                },
+                'https://giscus.app'
+            )
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://giscus.app') return;
+        setGiscusTeheme(document.documentElement.dataset.userColorScheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        setGiscusTeheme(e.detail)
+    })
+</script>
+
+</div>
+
+</main>
+
+
+        </main>
+        <footer class="footer flex">
+    <section class="container">
+        <nav class="footer-links">
+            
+            <a href="/index.xml">RSS</a>
+            
+        </nav>
+
+        
+    </section>
+    <script defer src="/ts/features.706a523ba43e6d0427c7fdf2b9d05dbd0920d3f12942b453690b495cb2522743.js" 
+    data-enable-footnotes="true"
+    ></script>
+</footer>
+
+    </body>
+</html>
