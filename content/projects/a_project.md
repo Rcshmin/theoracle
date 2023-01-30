@@ -1,9 +1,9 @@
 ---
-date: "2020-11-26"
-description: Make a blog with hugo tania theme!
+date: "2022-12-06"
+description: Make a decision tree from scratch, no cheaping out by just using a library!
 icon: "\U0001F4DD"
-link: https://github.com/WingLim/hugo-tania
-repo: https://github.com/WingLim/hugo-tania
-title: Hugo Tania Theme
+link: https://github.com/Rcshmin/datasciencefromscratch/blob/main/algorithms/decisiontrees/decisiontreesimplementation.Rmd
+repo: https://github.com/Rcshmin/datasciencefromscratch/blob/main/algorithms/decisiontrees/decisiontreesimplementation.Rmd
+title: Decision Tree Classifier v1 Code
 weight: 1
 ---

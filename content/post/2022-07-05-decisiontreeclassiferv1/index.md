@@ -1,5 +1,5 @@
 ---
-title: Decision Tree Classifier v1 From Scratch Implementation
+title: Decision Tree Classifier v1 From Scratch
 author: 'Rashmin Chitale'
 date: '2022-05-07'
 slug: []
