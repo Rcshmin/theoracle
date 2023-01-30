@@ -17,8 +17,8 @@ params:
   # Default to true
   enableFootnotes: true
   
-  siteName: "Hugo Tania is Amazing"
-  siteDesc: "Hugo is Absurdly Fast!"
+  siteName: "The Oracle"
+  siteDesc: "A static site hosting my data science projects (mostly), and whatever other endeavours I wish to self-indulgently display"
   author: "Rashmin Chitale"
 
   colorScheme:
